@@ -22,10 +22,20 @@ Output: `dist/OpenCodeS40.jad`, `dist/OpenCodeS40.jar` (~132 KB),
 Needs JDK 11+ (only runs the build tools), Python 3 + Pillow, curl, unzip, and
 `shasum` (from `perl`) — `tools/fetch_deps.sh` calls `shasum -a 256`.
 
-The mark is generated, not hand-drawn: `tools/make_mark.py` reads opencode's own
-`logo-dark.svg` and writes `OcsMark.java` plus `tools/mark_data.py`, so the
-packaged icon and the on-screen wordmark are the same letterforms. The colours
-come from the theme opencode's server ships (accent `#9a5feb`).
+The identity is generated, not hand-drawn:
+
+- `tools/make_mark.py` reads opencode's `logo-ornate-dark.svg` and writes
+  `OcsMark.java` (for the app) plus `tools/mark_data.py` (for share images), so
+  the on-screen wordmark and the exported mark cannot drift apart. The ornate
+  and plain logos share geometry; they differ only in tone, which the theme
+  supplies.
+- `tools/make_art.py icon` redraws opencode's own app icon
+  (`favicon-v3.svg`) from its geometry, so no SVG renderer is needed on the
+  build host and the PNG stays deterministic. Their `apple-touch-icon-v3.png`
+  is a placeholder empty-box graphic and is not used.
+
+Colours come from the theme opencode's server ships: accent `#9a5feb`, with
+their background `#181818`, panel `#15141b`, border `#2d2d2d` and text `#e4e4e4`.
 
 Pipeline: ECJ compiles against the CLDC 1.1 + MIDP 2.0 API stubs plus the
 optional JSR 75 FileConnection API (MicroEmulator jar), the PIM API and the
