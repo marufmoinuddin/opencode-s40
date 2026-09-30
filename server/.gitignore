@@ -1,0 +1,23 @@
+# Built binary
+ocs40-server
+
+# Private PKI: the root CA key must never be committed. Only the generated
+# certificate for the phone ("ocs40-ca.cer") is shareable, and even that is
+# specific to your deployment, so all of it is ignored.
+certs/
+*.key
+*.pem
+*.cer
+*.crt
+*.csr
+*.srl
+
+# Runtime state: chats, paired devices and the admin token.
+data/
+*.db
+*.db-shm
+*.db-wal
+admin_token
+
+# Test-run scratch (see e2e.sh)
+e2e-shots/
