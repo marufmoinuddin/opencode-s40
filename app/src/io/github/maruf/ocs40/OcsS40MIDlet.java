@@ -79,7 +79,7 @@ public class OcsS40MIDlet extends MIDlet implements CommandListener {
         "Web'de ara ve kısaca cevapla: ",
         "Bugün ve yarın hava durumu, şehir: ",
         "Web'de ara: bugünün en önemli haberleri, 5 kısa satır.",
-        "Güncel kur, web'de ara, önce rakamlar: ",
+        "Güncel kod, önce rakamlar: ",
         "İngilizceye çevir: ",
         "Türkçeye çevir: ",
         "Bu mesaja kısa ve samimi bir cevap yaz: ",

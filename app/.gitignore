@@ -8,3 +8,7 @@ app.local.properties
 # Emulator harness state. The app writes a setup backup here, which is
 # restored on the next run and makes the harness behave differently.
 app/build/emu/rms/
+
+# Python bytecode from tools/
+__pycache__/
+*.pyc

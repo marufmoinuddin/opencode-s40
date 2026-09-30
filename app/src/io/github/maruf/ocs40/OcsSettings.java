@@ -14,7 +14,8 @@ import javax.microedition.rms.RecordStoreException;
  *
  * Stored: gateway URL, access code, test mode flag, the URL for which the
  * connection test last passed, look & feel (theme, text size, sound,
- * vibration, language), web search on/off and whether the last chat is kept
+ * vibration, language), whether opencode may change files, and whether the
+ * last chat is kept
  * on the phone (OcsChatStore; off by default), and whether the setup wizard was
  * finished or skipped, the two backlight options and the user's notes for
  * OpenCode (sent with every message). No chat content is stored here. The

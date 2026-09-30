@@ -92,13 +92,22 @@ final class OcsHomeCanvas extends Canvas implements CommandListener {
         g.setColor(OcsTheme.bg);
         g.fillRect(0, 0, w, h);
 
-        // header: spark + title + status line
+        // header: wordmark + title + status line
         int headH = Math.max(f.getHeight() + sm.getHeight() + 10, 40);
         g.setColor(OcsTheme.bar);
         g.fillRect(0, 0, w, headH);
-        int ls = headH - 12;
-        OcsLogo.draw(g, MARGIN + ls / 2 + 2, headH / 2, ls, 100, 0);
-        int tx = MARGIN + ls + 10;
+        // The wordmark needs width, not height: 39:6, so a 96 px mark is about
+        // 15 px tall. Sized to fit beside the title on a 128 px screen.
+        int tw = f.stringWidth("OpenCode S40") + 10;
+        int lw = w - 2 * MARGIN - tw - 6;
+        if (lw >= 48) {
+            OcsLogo.draw(g, MARGIN + lw / 2, headH / 2, lw, 100, 0);
+        } else {
+            // Too narrow for a wordmark: the small sparkle stands in.
+            OcsLogo.sparkle(g, MARGIN + 8, headH / 2, headH / 3, OcsTheme.spark);
+            lw = 18;
+        }
+        int tx = MARGIN + lw + 8;
         g.setColor(OcsTheme.barInk);
         g.setFont(f);
         g.drawString("OpenCode S40", tx, 5, Graphics.TOP | Graphics.LEFT);

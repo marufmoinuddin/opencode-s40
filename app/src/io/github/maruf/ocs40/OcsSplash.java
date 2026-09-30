@@ -7,7 +7,7 @@ import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
 
 /**
- * Start-up screen: the spark pops in and turns, the title fades in, the
+ * Start-up screen: the wordmark pops in, the title fades in, the
  * jingle plays once. About 2.4 s; any key skips. Full screen, all sizes
  * derived from getWidth()/getHeight().
  */
@@ -84,7 +84,10 @@ final class OcsSplash extends Canvas {
         g.setColor(OcsTheme.bg);
         g.fillRect(0, 0, w, h);
 
-        int size = Math.min(w, h) * 42 / 100;
+        // The wordmark is 39:6, so its width, not its height, is the limit:
+        // on a 240 px screen, 62% of the width is about 149 px and 23 px tall.
+        int markW = w * 62 / 100;
+        int markH = markW * OcsMark.HEIGHT / OcsMark.WIDTH;
         int cx = w / 2;
         int cy = h * 40 / 100;
 
@@ -97,21 +100,21 @@ final class OcsSplash extends Canvas {
         } else {
             scale = 100 + ((frame / 3) % 2 == 0 ? 0 : 3);
         }
-        OcsLogo.draw(g, cx, cy, size, scale, frame * 3);
+        OcsLogo.draw(g, cx, cy, markW, scale, frame * 3);
 
-        // twinkles around the spark
+        // twinkles around the mark
         if (frame > 10) {
-            int r = size * 60 / 100;
+            int r = markH * 90 / 100;
             int tw = (frame % 6 < 3) ? 4 : 2;
-            OcsLogo.sparkle(g, cx + r, cy - r / 2, tw + size / 30, OcsTheme.accent);
-            OcsLogo.sparkle(g, cx - r, cy + r / 3, (6 - tw) + size / 40, OcsTheme.accent);
+            OcsLogo.sparkle(g, cx + r, cy - r / 2, tw + markH / 6, OcsTheme.accent);
+            OcsLogo.sparkle(g, cx - r, cy + r / 3, (6 - tw) + markH / 8, OcsTheme.accent);
         }
 
         // title fades in from the background colour
         int t = frame < 12 ? 0 : Math.min(256, (frame - 12) * 32);
         g.setFont(OcsTheme.bold);
         g.setColor(OcsTheme.mix(OcsTheme.bg, OcsTheme.ink, t));
-        int ty = cy + size / 2 + size / 5;
+        int ty = cy + markH / 2 + markH;
         g.drawString("OpenCode S40", cx, ty, Graphics.TOP | Graphics.HCENTER);
         g.setFont(OcsTheme.small);
 

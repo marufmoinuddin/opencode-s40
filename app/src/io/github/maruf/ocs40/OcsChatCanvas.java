@@ -47,7 +47,7 @@ final class OcsChatCanvas extends Canvas implements CommandListener, OcsChatSess
     /** Side margin in reading mode. */
     private static final int RPAD = 8;
     private static final int TOAST_MS = 1600;
-    /** After this many seconds with web search on, say that searching takes time. */
+    /** After this many seconds waiting, say that opencode is still working. */
     private static final int SLOW_SECONDS = 15;
     private static final int LIGHT_EVERY_MS = 8000;
     private static final int LIGHT_IDLE_MS = 60000;
@@ -1179,7 +1179,9 @@ final class OcsChatCanvas extends Canvas implements CommandListener, OcsChatSess
             int ty = y + BUBBLE_PAD;
             int mx = x + BUBBLE_PAD;
             if (b.kind == OcsChatSession.KIND_ASSISTANT) {
-                OcsLogo.draw(g, mx + 4, ty + sm.getHeight() / 2, 10, 100, 0);
+                // A wordmark cannot fit in a 12 px gutter; the sparkle is the
+                // small-size mark for this app.
+                OcsLogo.sparkle(g, mx + 4, ty + sm.getHeight() / 2, 4, OcsTheme.spark);
                 mx += 12;
             }
             g.setFont(sm);
@@ -1302,18 +1304,20 @@ final class OcsChatCanvas extends Canvas implements CommandListener, OcsChatSess
         Vector title = new Vector();
         OcsText.wrap(OcsL.s("Merhaba! Ne sormak istersin?", "Hi! What would you like to ask?"), OcsTheme.bold, w - 4 * PAD, title);
         Vector tips = new Vector();
-        OcsText.wrap(OcsL.s("Yazmak için orta tuş veya 5. OpenCode gerekirse web'de arar. Tüm tuşlar: Seçenekler > Kısayollar.",
-                "Centre key or 5 to write. OpenCode searches the web when needed. All keys: Options > Shortcuts."),
+        OcsText.wrap(OcsL.s("Yazmak için orta tuş veya 5. Yanıtlar kendi opencode sunucudan gelir. Tüm tuşlar: Seçenekler > Kısayollar.",
+                "Centre key or 5 to write. Answers come from your own opencode server. All keys: Options > Shortcuts."),
                 OcsTheme.small, w - 4 * PAD, tips);
         int textH = title.size() * OcsTheme.bold.getHeight() + 6 + tips.size() * OcsTheme.small.getHeight();
-        int size = Math.min(Math.min(w, vh) * 34 / 100, vh - textH - 12 - 2 * PAD);
-        boolean logo = size >= 16;
-        int groupH = textH + (logo ? size + 12 : 0);
+        // The welcome block centres the wordmark; its height is width/6.5.
+        int markW = w * 60 / 100;
+        int markH = markW * OcsMark.HEIGHT / OcsMark.WIDTH;
+        boolean logo = markH >= 6;
+        int groupH = textH + (logo ? markH + 14 : 0);
         int y = top + Math.max(PAD, (vh - groupH) * 2 / 5);
         int bottom = top + vh;
         if (logo) {
-            OcsLogo.draw(g, cx, y + size / 2, size, 100, 0);
-            y += size + 12;
+            OcsLogo.draw(g, cx, y + markH / 2, markW, 100, 0);
+            y += markH + 14;
         }
         g.setFont(OcsTheme.bold);
         g.setColor(OcsTheme.ink);
@@ -1335,7 +1339,9 @@ final class OcsChatCanvas extends Canvas implements CommandListener, OcsChatSess
         boolean test = midlet.settings.testMode;
         g.setColor(test ? OcsTheme.testBar : OcsTheme.bar);
         g.fillRect(0, 0, w, bh);
-        OcsLogo.draw(g, PAD + bh / 2 - 2, bh / 2, bh - 6, 100, 0);
+        // The chat header bar is ~24 px tall; the wordmark would be a sliver,
+        // so it carries the sparkle instead.
+        OcsLogo.sparkle(g, PAD + 6, bh / 2, (bh - 8) / 2, OcsTheme.spark);
         int right = w - PAD;
         String rem = session.remaining();
         if (test || rem.length() > 0) {

@@ -3,61 +3,64 @@ package io.github.maruf.ocs40;
 import javax.microedition.lcdui.Graphics;
 
 /**
- * OpenCode-style spark mark (terracotta radial burst), drawn with primitives;
- * no image asset is embedded. Used with the permission the user stated on
- * 2026-09-25; the app still says it is an unofficial client.
+ * opencode's wordmark, drawn with MIDP primitives.
+ *
+ * <p>The geometry lives in {@link OcsMark}, generated from opencode's own logo
+ * SVG by tools/make_mark.py, so the packaged icon and this on-screen mark are
+ * the same shape. Drawing it with fillRect costs a few dozen bytes instead of a
+ * bitmap, which matters in a ~130 KB MIDlet.
+ *
+ * <p>The mark is two layers, because that is how opencode builds theirs: the
+ * base is the body of each letter and the overlay is the counters of o/e/c plus
+ * the crossbar of the e, drawn on top in a darker tone. On the phone the base
+ * is the purple accent and the overlay is a deep purple that reads as a hole at
+ * 240x320.
+ *
+ * <p>Unofficial: opencode and its name are their owners' trademarks. This is a
+ * client written by a user, not an official release.
  */
 final class OcsLogo {
-
-    /** Ray lengths in percent of the radius; slightly uneven, like a hand-drawn spark. */
-    private static final int[] RAYS = { 100, 82, 94, 78, 100, 86, 92, 80, 98, 84, 90, 79 };
 
     private OcsLogo() {
     }
 
     /**
-     * @param cx,cy   centre
-     * @param size    diameter in pixels
-     * @param twinkle scale in percent for animation (100 = rest)
-     * @param spin    rotation in degrees
+     * Draws the wordmark centred on (cx, cy).
+     *
+     * @param width   the mark's width in pixels. Its height follows the 39:6
+     *                aspect, so callers size this horizontally: a wordmark sized
+     *                by height would come out as a sliver.
+     * @param twinkle scale in percent for the splash animation (100 = rest)
+     * @param spin    unused. The mark is a wordmark and does not rotate; the
+     *                parameter is kept so the splash can keep its signature
      */
-    static void draw(Graphics g, int cx, int cy, int size, int twinkle, int spin) {
-        int r = size / 2 * twinkle / 100;
-        if (r < 2) {
+    static void draw(Graphics g, int cx, int cy, int width, int twinkle, int spin) {
+        int u = (width * twinkle / 100) / OcsMark.WIDTH;
+        if (u < 1) {
             return;
         }
+        // Centre on the true drawn size, since u is floored and w may be odd.
+        int w = OcsMark.WIDTH * u;
+        int x0 = cx - w / 2;
+        int y0 = cy - (OcsMark.HEIGHT * u) / 2;
+
         g.setColor(OcsTheme.spark);
-        int n = RAYS.length;
-        // tapered rays: wide at the core, narrow and rounded at the tip
-        int base = Math.max(1, r * 17 / 100);
-        int tipW = Math.max(1, r * 9 / 100);
-        for (int i = 0; i < n; i++) {
-            double a = Math.toRadians(spin + i * 360.0 / n);
-            double ca = Math.cos(a);
-            double sa = Math.sin(a);
-            double len = r * RAYS[i] / 100.0 - tipW / 2.0;
-            // perpendicular unit vector
-            double px = -sa;
-            double py = ca;
-            int b1x = cx + (int) (px * base / 2);
-            int b1y = cy + (int) (py * base / 2);
-            int b2x = cx - (int) (px * base / 2);
-            int b2y = cy - (int) (py * base / 2);
-            int t1x = cx + (int) (ca * len + px * tipW / 2);
-            int t1y = cy + (int) (sa * len + py * tipW / 2);
-            int t2x = cx + (int) (ca * len - px * tipW / 2);
-            int t2y = cy + (int) (sa * len - py * tipW / 2);
-            g.fillTriangle(b1x, b1y, b2x, b2y, t1x, t1y);
-            g.fillTriangle(b2x, b2y, t1x, t1y, t2x, t2y);
-            int ex = cx + (int) (ca * len);
-            int ey = cy + (int) (sa * len);
-            g.fillArc(ex - tipW / 2, ey - tipW / 2, tipW + 1, tipW + 1, 0, 360);
-        }
-        int core = Math.max(2, r * 24 / 100);
-        g.fillArc(cx - core, cy - core, core * 2, core * 2, 0, 360);
+        fillBlocks(g, OcsMark.BASE, x0, y0, u);
+        g.setColor(OcsTheme.accentDeep);
+        fillBlocks(g, OcsMark.OVERLAY, x0, y0, u);
     }
 
-    /** Small four-point sparkle, used as a decoration. */
+    private static void fillBlocks(Graphics g, int[][] blocks, int x0, int y0, int u) {
+        for (int i = 0; i < blocks.length; i++) {
+            int[] b = blocks[i];
+            g.fillRect(x0 + b[0] * u, y0 + b[1] * u, b[2] * u, b[3] * u);
+        }
+    }
+
+    /**
+     * A small four-point sparkle in opencode's purple, kept for the splash
+     * decoration and the chat avatar.
+     */
     static void sparkle(Graphics g, int cx, int cy, int r, int color) {
         if (r < 1) {
             return;

@@ -37,6 +37,14 @@ no public CA issues a chain it will accept. The gateway therefore terminates TLS
 itself with a certificate from a private root CA that you install on the phone
 once. Details and measurements: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
+## Look
+
+The palette and the mark are opencode's: the dark theme is the one their server
+ships (`#181818` background, `#15141b` panel, `#2d2d2d` border, `#e4e4e4` text),
+with their accent `#9a5feb` as the highlight colour, and the wordmark is
+generated from their own logo SVG rather than drawn by eye. The light theme is
+ours, since opencode's own UI is dark-only. Light and dark, three text sizes.
+
 ## Safety: the phone is read-only by default
 
 opencode is a coding agent. Its default agent can run shell commands and write

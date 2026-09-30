@@ -4,8 +4,19 @@ import javax.microedition.lcdui.Font;
 
 /**
  * Colours and fonts for the custom screens. Two palettes (light "Gündüz",
- * dark "Gece") and three text sizes, chosen in Ayarlar. Warm paper
- * background and a terracotta accent to match the OpenCode-style spark.
+ * dark "Gece") and three text sizes, chosen in Ayarlar.
+ *
+ * <p>The dark palette is opencode's own theme, taken from the schema the
+ * opencode server ships (its theme.json "defs"): background #181818, panel
+ * #15141b, border #2d2d2d, text #e4e4e4, muted #565B66, with the accent set to
+ * opencode's "purple" (#9a5feb), which is what their theme maps
+ * primary/accent/info to. Secondary pink #ff628c, success cyan #93e0e3,
+ * error red #cc9393 and warning orange #dfaf8f are their defs too.
+ *
+ * <p>opencode's own interface is dark-only, so there is no light palette to
+ * copy. The light one here is built from the same hue family (purple accent,
+ * pink and cyan supports) on a warm-neutral base chosen for a small reflective
+ * screen in daylight.
  */
 final class OcsTheme {
 
@@ -16,6 +27,8 @@ final class OcsTheme {
     static int ink;
     static int muted;
     static int accent;
+    /** Deeper accent for the wordmark's counters, so they read as holes. */
+    static int accentDeep;
     static int accentInk;
     static int bar;
     static int barInk;
@@ -34,35 +47,39 @@ final class OcsTheme {
 
     static void apply(OcsSettings s) {
         if (s.theme == 1) {
-            bg = 0x141417;
-            surface = 0x25252B;
-            border = 0x34343C;
-            ink = 0xECE8E1;
-            muted = 0x9A958C;
-            accent = 0xE08A6B;
-            accentInk = 0x1A1210;
-            bar = 0x0B0B0D;
-            barInk = 0xF4EFE6;
-            error = 0xFF8A7A;
-            errorBg = 0x3A2323;
-            testBar = 0x8A4A00;
-            selection = 0x33272A;
-            spark = 0xE08A6B;
+            // opencode's own dark theme.
+            bg = 0x181818;
+            surface = 0x15141B;
+            border = 0x2D2D2D;
+            ink = 0xE4E4E4;
+            muted = 0x565B66;
+            accent = 0x9A5FEB;      // opencode "purple": primary + accent
+            accentDeep = 0x0B0B0F; // counters/crossbar: near-black on the dark bg
+            accentInk = 0x14101C;   // dark ink on the purple accent
+            bar = 0x0F0F0F;
+            barInk = 0xE4E4E4;
+            error = 0xCC9393;       // opencode "red"
+            errorBg = 0x37222C;     // their diffRemovedBg
+            testBar = 0x6B3FA0;     // purple, darkened for the TEST banner
+            selection = 0x2A2140;   // purple tint over the panel
+            spark = 0x9A5FEB;
         } else {
-            bg = 0xFAF6EF;
+            // Light: the same purple family on a daylight-readable base.
+            bg = 0xFAF9FC;
             surface = 0xFFFFFF;
-            border = 0xE4DCCD;
-            ink = 0x26252C;
-            muted = 0x7C766B;
-            accent = 0xC96442;
+            border = 0xE2DFEA;
+            ink = 0x1F1D24;
+            muted = 0x6E6A7C;
+            accent = 0x7C3AED;      // opencode purple, darkened for contrast
+            accentDeep = 0xF3EEFF; // counters/crossbar: near-white on the light bg
             accentInk = 0xFFFFFF;
-            bar = 0x26252C;
+            bar = 0x1F1D24;
             barInk = 0xFFFFFF;
             error = 0xB3261E;
-            errorBg = 0xFBE4E1;
-            testBar = 0xB35C00;
-            selection = 0xF6E3D9;
-            spark = 0xD97757;
+            errorBg = 0xFBE4E9;
+            testBar = 0x5B2DA8;
+            selection = 0xEDE7FB;
+            spark = 0x9A5FEB;
         }
         int size = s.fontSize == 0 ? Font.SIZE_SMALL : s.fontSize == 2 ? Font.SIZE_LARGE : Font.SIZE_MEDIUM;
         font = Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_PLAIN, size);
