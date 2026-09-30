@@ -41,7 +41,7 @@ SRCS := $(shell find src -name '*.java' | sort)
 STUB_SRCS := $(shell find stubs -name '*.java' | sort)
 STUBS = $(BUILD)/stubs
 
-.PHONY: all build check deps clean emu promo
+.PHONY: all build check deps clean emu promo images
 
 all: build check
 
@@ -93,6 +93,11 @@ emu:
 promo:
 	@test -d $(BUILD)/emu/shots || { echo "run 'make emu' first" >&2; exit 1; }
 	$(PYTHON) tools/promo.py $(BUILD)/emu/shots $(BUILD)/promo
+
+## images: regenerate the README images from the same letterform data as the app
+images:
+	$(PYTHON) tools/make_readme_logo.py ../docs/images/logo.png 560
+	$(PYTHON) tools/make_readme_icon.py ../docs/images/icon.png
 
 clean:
 	rm -rf $(BUILD) $(DIST)

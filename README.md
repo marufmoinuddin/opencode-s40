@@ -1,6 +1,8 @@
 # OpenCode S40
 
-**Talk to your own opencode coding agent from a 2007 Nokia.**
+<p align="center">
+  <img src="docs/images/logo.png" alt="OpenCode S40 — talk to your own opencode coding agent from a 2007 Nokia" width="560">
+</p>
 
 OpenCode S40 is an unofficial [opencode](https://opencode.ai) client for Nokia
 Series 40 phones (Java ME, CLDC 1.1 / MIDP 2.0), plus the small Go gateway it
@@ -8,8 +10,13 @@ talks to. The phone never runs opencode: you run `opencode serve` on your own
 machine, the gateway translates between the phone's 240x320 world and
 opencode's HTTP API, and your code and keys never leave your computer.
 
+<p align="center">
+  <img src="docs/images/icon.png" alt="The app icon: opencode's own mark" width="72">
+</p>
+
 > Unofficial side project. Not made, endorsed or supported by opencode, its
-> authors, or Nokia.
+> authors, or Nokia. The phone app is ported from the MIT-licensed
+> [Claude S40](https://github.com/emir/claude-s40) by Emir Karşıyakalı.
 
 ## What is in here
 
