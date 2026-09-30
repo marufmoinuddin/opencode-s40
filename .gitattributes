@@ -1,0 +1,30 @@
+# Default to text; the pinned build-tool hashes are SHA-256 hex strings that
+# must not be touched by CRLF conversion on a Windows clone.
+* text=auto eol=lf
+
+# Text files that must stay LF: shell scripts run on macOS/Linux, and a stray
+# CR makes them fail with an unhelpful error.
+*.sh text eol=lf
+Makefile text eol=lf
+*.mk text eol=lf
+
+# Sources and scripts.
+*.go text eol=lf
+*.java text eol=lf
+*.py text eol=lf
+*.pro text eol=lf
+*.properties text eol=lf
+*.md text eol=lf
+*.lock text eol=lf
+
+# Public key material: exactly LF, and never line-ending conversion.
+*.pem text eol=lf
+*.key text eol=lf
+*.cer binary
+*.crt binary
+
+# Generated deterministically by app/tools/make_art.py at build time; tracked
+# only so the JAR can be rebuilt. PNG is already binary, stated for clarity.
+*.png binary
+*.jar binary
+*.zip binary
